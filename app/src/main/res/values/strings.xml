@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Covid19Stadistics</string>
+    <string name="textBtn">Seleccione una fecha</string>
+</resources>
