@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".ui.MainActivity">
+    tools:context=".ui.HomeActivity">
 
     <TextView
         android:id="@+id/titleTv"
@@ -47,7 +47,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cantDeceasedTv"
-        android:src="@drawable/home"/>
+        android:src="@drawable/home"
+        android:contentDescription="@string/ImageDescription"/>
 
     <Button
         android:id="@+id/selectDateBtn"

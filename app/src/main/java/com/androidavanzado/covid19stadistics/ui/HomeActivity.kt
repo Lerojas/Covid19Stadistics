@@ -1,13 +1,12 @@
 package com.androidavanzado.covid19stadistics.ui
 
-import android.app.DatePickerDialog
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.androidavanzado.covid19stadistics.databinding.ActivityMainBinding
+import com.androidavanzado.covid19stadistics.databinding.ActivityHomeBinding
 import com.androidavanzado.covid19stadistics.di.Injector
 import com.androidavanzado.covid19stadistics.ui.viewmodel.StadisticsViewModel
 import com.androidavanzado.covid19stadistics.ui.viewmodel.ViewModelFactory
@@ -15,15 +14,15 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityMainBinding
+    private lateinit var binding : ActivityHomeBinding
     private lateinit var viewModel:StadisticsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
+        binding = ActivityHomeBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(
@@ -35,10 +34,11 @@ class MainActivity : AppCompatActivity() {
         setupUi()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setupUi(){
 
         viewModel.getData(getDate())
-        viewModel.data.observe(this, androidx.lifecycle.Observer {
+        viewModel.data.observe(this, {
 
             it?.let {
                 binding.titleTv.text = setDate(it.date)
@@ -56,18 +56,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getDate() : String {
+    @SuppressLint("SimpleDateFormat")
+    private fun getDate(): String {
 
-        var calendar = Calendar.getInstance()
+        val calendar = Calendar.getInstance()
         calendar.time = Date()
         calendar.add(Calendar.DATE, -1)
 
         val df: DateFormat = SimpleDateFormat("yyyy-MM-dd")
-        val dateString: String = df.format(calendar.time)
-        return dateString
+        return df.format(calendar.time)
     }
 
-    private fun setDate(date: Date) : String {
+    @SuppressLint("SimpleDateFormat")
+    private fun setDate(date: Date): String {
 
         val dayFormat: DateFormat = SimpleDateFormat("dd")
         val day: String = dayFormat.format(date)
@@ -92,8 +93,6 @@ class MainActivity : AppCompatActivity() {
             else -> "Invalid month"
         }
 
-        val dateString = "$day de $monthString de $year"
-
-        return dateString
+        return "$day de $monthString de $year"
     }
 }
