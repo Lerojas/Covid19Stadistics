@@ -3,13 +3,16 @@ package com.androidavanzado.covid19stadistics.ui
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.androidavanzado.covid19stadistics.R
 import com.androidavanzado.covid19stadistics.databinding.ActivityHomeBinding
 import com.androidavanzado.covid19stadistics.di.Injector
 import com.androidavanzado.covid19stadistics.ui.viewmodel.StadisticsViewModel
 import com.androidavanzado.covid19stadistics.ui.viewmodel.ViewModelFactory
+import com.bumptech.glide.Glide
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -32,6 +35,7 @@ class HomeActivity : AppCompatActivity() {
         ).get(StadisticsViewModel::class.java)
 
         setupUi()
+        showLoading()
     }
 
     @SuppressLint("SetTextI18n")
@@ -41,6 +45,8 @@ class HomeActivity : AppCompatActivity() {
         viewModel.data.observe(this, {
 
             it?.let {
+                hideLoading()
+                showUiData()
                 binding.titleTv.text = setDate(it.date)
                 binding.confirmedCasesTv.text = "Casos confirmados: ${it.confirmed}"
                 binding.cantDeceasedTv.text = "Cantidad de personas fallecidas: ${it.deaths}"
@@ -48,12 +54,29 @@ class HomeActivity : AppCompatActivity() {
         })
 
         viewModel.onMessageError.observe(this, {
+            hideLoading()
             Toast.makeText(this, "msg: $it", Toast.LENGTH_SHORT).show()
         })
 
         binding.selectDateBtn.setOnClickListener {
 
         }
+    }
+
+    private fun showLoading(){
+        Glide.with(this).asGif().load(R.raw.loading).into(binding.imageViewLoading)
+    }
+
+    private fun hideLoading(){
+        binding.imageViewLoading.visibility = View.GONE
+    }
+
+    private fun showUiData(){
+        binding.titleTv.visibility = View.VISIBLE
+        binding.confirmedCasesTv.visibility = View.VISIBLE
+        binding.cantDeceasedTv.visibility = View.VISIBLE
+        binding.imageView.visibility = View.VISIBLE
+        binding.selectDateBtn.visibility = View.VISIBLE
     }
 
     @SuppressLint("SimpleDateFormat")
