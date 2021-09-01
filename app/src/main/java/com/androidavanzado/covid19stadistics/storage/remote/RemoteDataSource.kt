@@ -13,8 +13,6 @@ class RemoteDataSource(private val apiClient: ApiClient) : DataSource {
         try{
             response?.let {
 
-                Log.e("XXXXX","${it.isSuccessful}")
-
                 return if(it.isSuccessful && it.body()!=null) {
                     val data = it.body()?.data
                     Result.Success(data)

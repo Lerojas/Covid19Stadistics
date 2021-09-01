@@ -2,6 +2,7 @@ package com.androidavanzado.covid19stadistics.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
@@ -12,15 +13,20 @@ import com.androidavanzado.covid19stadistics.databinding.ActivityHomeBinding
 import com.androidavanzado.covid19stadistics.di.Injector
 import com.androidavanzado.covid19stadistics.ui.viewmodel.StadisticsViewModel
 import com.androidavanzado.covid19stadistics.ui.viewmodel.ViewModelFactory
+import com.androidavanzado.covid19stadistics.util.DateTextFormat
+import com.androidavanzado.covid19stadistics.util.DateYesterday
+import com.androidavanzado.covid19stadistics.util.MonthToNameMonth
 import com.bumptech.glide.Glide
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
+import java.text.NumberFormat
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityHomeBinding
     private lateinit var viewModel:StadisticsViewModel
+
+    private val dateYesterday = DateYesterday()
+    private val monthToNameMonth = MonthToNameMonth()
+    private val dateTextFormat = DateTextFormat(monthToNameMonth)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,16 +46,20 @@ class HomeActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun setUpUi(){
 
-        callGetData(getDate())
+        callGetData(dateYesterday())
 
         viewModel.data.observe(this, {
 
             it?.let {
                 hideLoading()
                 showUiData()
-                binding.titleTv.text = setDate(it.date)
-                binding.confirmedCasesTv.text = "Casos confirmados: ${it.confirmed}"
-                binding.cantDeceasedTv.text = "Cantidad de personas fallecidas: ${it.deaths}"
+                binding.titleTv.text = dateTextFormat(it.date)
+
+                val confirmedCases = NumberFormat.getInstance().format(it.confirmed)
+                binding.confirmedCasesTv.text = "Casos confirmados: $confirmedCases"
+
+                val deathsCases = NumberFormat.getInstance().format(it.deaths)
+                binding.cantDeceasedTv.text = "Cantidad de personas fallecidas: $deathsCases"
             }
         })
 
@@ -92,46 +102,6 @@ class HomeActivity : AppCompatActivity() {
         binding.cantDeceasedTv.visibility = View.GONE
         binding.imageView.visibility = View.GONE
         binding.selectDateBtn.visibility = View.GONE
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    private fun getDate(): String {
-
-        val calendar = Calendar.getInstance()
-        calendar.time = Date()
-        calendar.add(Calendar.DATE, -1)
-
-        val df: DateFormat = SimpleDateFormat("yyyy-MM-dd")
-        return df.format(calendar.time)
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    private fun setDate(date: Date): String {
-
-        val dayFormat: DateFormat = SimpleDateFormat("dd")
-        val day: String = dayFormat.format(date)
-        val monthFormat: DateFormat = SimpleDateFormat("MM")
-        val month: String = monthFormat.format(date)
-        val yearFormat: DateFormat = SimpleDateFormat("yyyy")
-        val year: String = yearFormat.format(date)
-
-        val monthString = when (month) {
-            "01" -> "Enero"
-            "02" -> "Febrero"
-            "03" -> "Marzo"
-            "04" -> "Abril"
-            "05" -> "Mayo"
-            "06" -> "Junio"
-            "07" -> "Julio"
-            "08" -> "Agosto"
-            "09" -> "Septiembre"
-            "10" -> "Octubre"
-            "11" -> "Noviembre"
-            "12" -> "Diciembre"
-            else -> "Invalid month"
-        }
-
-        return "$day de $monthString de $year"
     }
 
     private fun showDatePickerDialog(){

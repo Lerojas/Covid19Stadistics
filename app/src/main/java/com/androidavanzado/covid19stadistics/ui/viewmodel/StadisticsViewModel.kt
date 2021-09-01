@@ -18,20 +18,15 @@ class StadisticsViewModel(private val repository: Repository, application: Appli
     private val _values =  MutableLiveData<Stadistics>().apply { value = null  }
     val data: LiveData<Stadistics> = _values
 
-    private val _isViewLoading= MutableLiveData<Boolean>()
-    val isViewLoading: LiveData<Boolean> = _isViewLoading
-
     private val _onMessageError= MutableLiveData<String>()
     val onMessageError: LiveData<String> = _onMessageError
 
     fun getData(date: String){
-        _isViewLoading.postValue(true)
         viewModelScope.launch {
+
             var result: Result<Stadistics> = withContext(Dispatchers.IO){
                 repository.getData(date)
             }
-
-            _isViewLoading.postValue(false)
 
             when(result){
                 is Result.Success -> {
