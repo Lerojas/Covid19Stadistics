@@ -34,14 +34,14 @@ class HomeActivity : AppCompatActivity() {
             )
         ).get(StadisticsViewModel::class.java)
 
-        setupUi()
-        showLoading()
+        setUpUi()
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setupUi(){
+    private fun setUpUi(){
 
-        viewModel.getData(getDate())
+        callGetData(getDate())
+
         viewModel.data.observe(this, {
 
             it?.let {
@@ -59,11 +59,18 @@ class HomeActivity : AppCompatActivity() {
         })
 
         binding.selectDateBtn.setOnClickListener {
-
+            showDatePickerDialog()
         }
     }
 
+    private fun callGetData(dateString : String){
+        showLoading()
+        hideUiData()
+        viewModel.getData(dateString)
+    }
+
     private fun showLoading(){
+        binding.imageViewLoading.visibility = View.VISIBLE
         Glide.with(this).asGif().load(R.raw.loading).into(binding.imageViewLoading)
     }
 
@@ -77,6 +84,14 @@ class HomeActivity : AppCompatActivity() {
         binding.cantDeceasedTv.visibility = View.VISIBLE
         binding.imageView.visibility = View.VISIBLE
         binding.selectDateBtn.visibility = View.VISIBLE
+    }
+
+    private fun hideUiData(){
+        binding.titleTv.visibility = View.GONE
+        binding.confirmedCasesTv.visibility = View.GONE
+        binding.cantDeceasedTv.visibility = View.GONE
+        binding.imageView.visibility = View.GONE
+        binding.selectDateBtn.visibility = View.GONE
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -117,5 +132,22 @@ class HomeActivity : AppCompatActivity() {
         }
 
         return "$day de $monthString de $year"
+    }
+
+    private fun showDatePickerDialog(){
+        val datePicker = DatePickerFragment { day, month, year, -> onDateSelected(day, month, year) }
+        datePicker.show(supportFragmentManager, "datePicker")
+    }
+
+    private fun onDateSelected(day: Int, month: Int, year: Int) {
+
+        var monthString = month.toString()
+
+        if(monthString.length<2){
+            monthString = "0$monthString"
+        }
+
+        val dateString = "$year-$monthString-$day"
+        callGetData(dateString)
     }
 }
