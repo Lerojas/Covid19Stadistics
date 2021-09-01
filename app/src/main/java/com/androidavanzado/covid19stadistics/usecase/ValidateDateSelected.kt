@@ -1,6 +1,8 @@
 package com.androidavanzado.covid19stadistics.usecase
 
-import java.util.*
+import android.util.Log
+import java.util.Calendar
+import java.util.Date
 
 class ValidateDateSelected {
 
@@ -9,7 +11,6 @@ class ValidateDateSelected {
         val calendar = Calendar.getInstance()
         calendar.set(year,month,day)
         val dateSelected = calendar.time
-
         return dateSelected.before(Date())
     }
 }

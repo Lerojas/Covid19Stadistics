@@ -6,16 +6,16 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 
+@SuppressLint("SimpleDateFormat")
 class DateYesterday {
 
-    @SuppressLint("SimpleDateFormat")
+    private val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd")
+
     operator fun invoke(): String {
 
         val calendar = Calendar.getInstance()
         calendar.time = Date()
         calendar.add(Calendar.DATE, -1)
-
-        val df: DateFormat = SimpleDateFormat("yyyy-MM-dd")
-        return df.format(calendar.time)
+        return dateFormat.format(calendar.time)
     }
 }

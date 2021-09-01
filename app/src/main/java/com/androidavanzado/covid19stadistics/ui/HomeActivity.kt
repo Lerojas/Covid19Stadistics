@@ -1,6 +1,8 @@
 package com.androidavanzado.covid19stadistics.ui
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +18,8 @@ import com.androidavanzado.covid19stadistics.usecase.ValidateDateSelected
 import com.androidavanzado.covid19stadistics.util.DateTextFormat
 import com.androidavanzado.covid19stadistics.util.DateYesterday
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.Resource
+import java.lang.reflect.Array.set
 import java.text.NumberFormat
 
 class HomeActivity : AppCompatActivity() {
@@ -55,17 +59,20 @@ class HomeActivity : AppCompatActivity() {
                 binding.titleTv.text = dateTextFormat(it.date)
 
                 val confirmedCases = NumberFormat.getInstance().format(it.confirmed)
-                binding.confirmedCasesTv.text = "Casos confirmados: $confirmedCases"
+                binding.confirmedCasesTv.text = "${getString(R.string.messageConfirmedCases)} $confirmedCases"
 
                 val deathsCases = NumberFormat.getInstance().format(it.deaths)
-                binding.cantDeceasedTv.text = "Cantidad de personas fallecidas: $deathsCases"
+                binding.cantDeceasedTv.text = "${getString(R.string.messageDeathsCases)} $deathsCases"
             }
         })
 
-        viewModel.onMessageError.observe(this, {
+        viewModel.onMessageError.observe(this, {responseFailure ->
             hideLoading()
-            Toast.makeText(this, "msg: $it", Toast.LENGTH_SHORT).show()
-            callGetData(dateYesterday())
+            val messageFailure =
+                if(responseFailure) getString(R.string.messageNoData)
+                else getString(R.string.messageFailure)
+
+            showDialog(messageFailure)
         })
 
         binding.selectDateBtn.setOnClickListener {
@@ -105,7 +112,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun showDatePickerDialog(){
-        val datePicker = DatePickerFragment { day, month, year, -> onDateSelected(day, month, year) }
+        val datePicker = DatePickerFragment { day, month, year -> onDateSelected(day, month, year) }
         datePicker.show(supportFragmentManager, "datePicker")
     }
 
@@ -114,7 +121,7 @@ class HomeActivity : AppCompatActivity() {
         val validateDate = validateDateSelected(day, month, year)
 
         if(validateDate){
-            var monthString = month.toString()
+            var monthString = (month + 1).toString()
 
             if(monthString.length<2){
                 monthString = "0$monthString"
@@ -125,8 +132,23 @@ class HomeActivity : AppCompatActivity() {
             callGetData(dateString)
         }
         else{
-            Toast.makeText(this, R.string.messageDateCanNotSelected.toString(), Toast.LENGTH_SHORT).show()
-            callGetData(dateYesterday())
+            val message = getString(R.string.messageDateCanNotSelected)
+            showDialog(message)
         }
+    }
+
+    private fun showDialog(message: String){
+
+        val dialog = AlertDialog.Builder(this)
+            .setTitle(getString(R.string.tittleAlertDialog))
+            .setMessage(message)
+            .setPositiveButton(getString(R.string.textPossitiveButton)) { view, _ ->
+                view.dismiss()
+                callGetData(dateYesterday())
+            }
+            .setCancelable(false)
+            .create()
+
+        dialog.show()
     }
 }

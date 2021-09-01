@@ -11,15 +11,14 @@ import com.androidavanzado.covid19stadistics.storage.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.*
 
 class StadisticsViewModel(private val repository: Repository, application: Application): AndroidViewModel(application) {
 
     private val _values =  MutableLiveData<Stadistics>().apply { value = null  }
     val data: LiveData<Stadistics> = _values
 
-    private val _onMessageError= MutableLiveData<String>()
-    val onMessageError: LiveData<String> = _onMessageError
+    private val _onMessageError= MutableLiveData<Boolean>()
+    val onMessageError: LiveData<Boolean> = _onMessageError
 
     fun getData(date: String){
         viewModelScope.launch {
@@ -33,7 +32,7 @@ class StadisticsViewModel(private val repository: Repository, application: Appli
                     _values.value = result.data
                 }
                 is Result.Failure -> {
-                    _onMessageError.postValue(result.msg?:"Ocurrió un error")
+                    _onMessageError.postValue(result.optionFailure?:false)
                 }
             }
         }
