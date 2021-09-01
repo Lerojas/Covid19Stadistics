@@ -15,10 +15,8 @@ import com.androidavanzado.covid19stadistics.ui.viewmodel.ViewModelFactory
 import com.androidavanzado.covid19stadistics.usecase.ValidateDateSelected
 import com.androidavanzado.covid19stadistics.util.DateTextFormat
 import com.androidavanzado.covid19stadistics.util.DateYesterday
-import com.androidavanzado.covid19stadistics.util.MonthToNameMonth
 import com.bumptech.glide.Glide
 import java.text.NumberFormat
-import java.util.Date
 
 class HomeActivity : AppCompatActivity() {
 
@@ -26,8 +24,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var viewModel:StadisticsViewModel
 
     private val dateYesterday = DateYesterday()
-    private val monthToNameMonth = MonthToNameMonth()
-    private val dateTextFormat = DateTextFormat(monthToNameMonth)
+    private val dateTextFormat = DateTextFormat()
     private val validateDateSelected = ValidateDateSelected()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -128,7 +125,7 @@ class HomeActivity : AppCompatActivity() {
             callGetData(dateString)
         }
         else{
-            Toast.makeText(this, "No puede seleccionar una fecha igual o mayor a hoy.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.messageDateCanNotSelected.toString(), Toast.LENGTH_SHORT).show()
             callGetData(dateYesterday())
         }
     }

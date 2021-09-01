@@ -2,4 +2,7 @@
     <string name="app_name">Covid19Stadistics</string>
     <string name="textBtn">Seleccione una fecha</string>
     <string name="ImageDescription">image descripcion</string>
+    <string name="messageNoData">No se encontraron datos para la fecha seleccionada.</string>
+    <string name="messageFailure">Ocurrió un error, tratando de obtener la información.</string>
+    <string name="messageDateCanNotSelected">No puede seleccionar una fecha igual o mayor a hoy.</string>
 </resources>

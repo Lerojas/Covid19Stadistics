@@ -1,6 +1,7 @@
 package com.androidavanzado.covid19stadistics.storage.remote
 
 import android.util.Log
+import com.androidavanzado.covid19stadistics.R
 import com.androidavanzado.covid19stadistics.model.Stadistics
 import com.androidavanzado.covid19stadistics.storage.DataSource
 import com.androidavanzado.covid19stadistics.storage.Result
@@ -18,16 +19,14 @@ class RemoteDataSource(private val apiClient: ApiClient) : DataSource {
                     Result.Success(data)
                 }
                 else{
-                    Result.Failure("No se encontraron datos para la fecha seleccionada.")
+                    Result.Failure(R.string.messageNoData.toString())
                 }
             }?:run{
-                return Result.Failure("Ocurrió un error, tratanto de obtener la información.")
+                return Result.Failure(R.string.messageFailure.toString())
             }
         }
         catch (e:Exception){
             return Result.Failure(e.message)
         }
-
     }
-
 }
