@@ -2,7 +2,6 @@ package com.androidavanzado.covid19stadistics.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
@@ -13,11 +12,13 @@ import com.androidavanzado.covid19stadistics.databinding.ActivityHomeBinding
 import com.androidavanzado.covid19stadistics.di.Injector
 import com.androidavanzado.covid19stadistics.ui.viewmodel.StadisticsViewModel
 import com.androidavanzado.covid19stadistics.ui.viewmodel.ViewModelFactory
+import com.androidavanzado.covid19stadistics.usecase.ValidateDateSelected
 import com.androidavanzado.covid19stadistics.util.DateTextFormat
 import com.androidavanzado.covid19stadistics.util.DateYesterday
 import com.androidavanzado.covid19stadistics.util.MonthToNameMonth
 import com.bumptech.glide.Glide
 import java.text.NumberFormat
+import java.util.Date
 
 class HomeActivity : AppCompatActivity() {
 
@@ -27,6 +28,7 @@ class HomeActivity : AppCompatActivity() {
     private val dateYesterday = DateYesterday()
     private val monthToNameMonth = MonthToNameMonth()
     private val dateTextFormat = DateTextFormat(monthToNameMonth)
+    private val validateDateSelected = ValidateDateSelected()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +68,7 @@ class HomeActivity : AppCompatActivity() {
         viewModel.onMessageError.observe(this, {
             hideLoading()
             Toast.makeText(this, "msg: $it", Toast.LENGTH_SHORT).show()
+            callGetData(dateYesterday())
         })
 
         binding.selectDateBtn.setOnClickListener {
@@ -111,13 +114,22 @@ class HomeActivity : AppCompatActivity() {
 
     private fun onDateSelected(day: Int, month: Int, year: Int) {
 
-        var monthString = month.toString()
+        val validateDate = validateDateSelected(day, month, year)
 
-        if(monthString.length<2){
-            monthString = "0$monthString"
+        if(validateDate){
+            var monthString = month.toString()
+
+            if(monthString.length<2){
+                monthString = "0$monthString"
+            }
+
+            val dateString = "$year-$monthString-$day"
+
+            callGetData(dateString)
         }
-
-        val dateString = "$year-$monthString-$day"
-        callGetData(dateString)
+        else{
+            Toast.makeText(this, "No puede seleccionar una fecha igual o mayor a hoy.", Toast.LENGTH_SHORT).show()
+            callGetData(dateYesterday())
+        }
     }
 }

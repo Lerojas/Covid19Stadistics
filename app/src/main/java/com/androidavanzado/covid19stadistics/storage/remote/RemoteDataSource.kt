@@ -18,10 +18,10 @@ class RemoteDataSource(private val apiClient: ApiClient) : DataSource {
                     Result.Success(data)
                 }
                 else{
-                    Result.Failure("Sin datos")
+                    Result.Failure("No se encontraron datos para la fecha seleccionada.")
                 }
             }?:run{
-                return Result.Failure("Ocurrió un error")
+                return Result.Failure("Ocurrió un error, tratanto de obtener la información.")
             }
         }
         catch (e:Exception){
