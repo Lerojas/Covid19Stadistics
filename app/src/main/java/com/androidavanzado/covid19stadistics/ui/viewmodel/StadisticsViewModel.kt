@@ -11,8 +11,10 @@ import com.androidavanzado.covid19stadistics.storage.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class StadisticsViewModel(private val repository: Repository, application: Application): AndroidViewModel(application) {
+open class StadisticsViewModel @Inject constructor(
+    private val repository: Repository, application: Application): AndroidViewModel(application) {
 
     private val _values =  MutableLiveData<Stadistics>().apply { value = null  }
     val data: LiveData<Stadistics> = _values
