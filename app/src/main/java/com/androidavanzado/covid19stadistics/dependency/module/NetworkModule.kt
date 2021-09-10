@@ -39,10 +39,7 @@ class NetworkModule {
     }
 
     @Provides
-    fun provideServicesInterface(@Named("provideRetrofit") retrofit: Retrofit) : ServicesApiInterface {
-
-        var servicesApiInterface: ServicesApiInterface?=null
-        servicesApiInterface = retrofit.create(ServicesApiInterface::class.java)
-        return servicesApiInterface as ServicesApiInterface
+    fun provideServicesInterface(@Named("provideRetrofit") retrofit: Retrofit): ServicesApiInterface {
+        return retrofit.create(ServicesApiInterface::class.java)
     }
 }

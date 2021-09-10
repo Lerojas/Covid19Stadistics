@@ -7,16 +7,6 @@ import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
-
-/*object Injector {
-
-    private val dataSource: DataSource = RemoteDataSource(ServicesApiInterface)
-    private val noteRepository: Repository = Repository((dataSource))
-
-    fun provideRepository() = noteRepository
-}*/
-
-
 @Module
 class RepositoryModule {
     @Singleton

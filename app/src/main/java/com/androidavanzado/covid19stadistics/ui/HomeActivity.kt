@@ -20,7 +20,6 @@ import javax.inject.Inject
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityHomeBinding
-    private lateinit var myApplication: MyApplication
 
     @Inject lateinit var viewModelFactory: ViewModelFactory
     lateinit var viewModel : StadisticsViewModel
@@ -30,17 +29,13 @@ class HomeActivity : AppCompatActivity() {
     private val validateDateSelected = ValidateDateSelected()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        myApplication = MyApplication()
-        myApplication.appComponent.inject(this)
-
+        MyApplication().appComponent.inject(this)
         super.onCreate(savedInstanceState)
 
         binding = ActivityHomeBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
         viewModel = getViewModel(viewModelFactory)
-
         setUpUi()
     }
 
