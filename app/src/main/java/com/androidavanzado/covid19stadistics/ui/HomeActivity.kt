@@ -2,49 +2,43 @@ package com.androidavanzado.covid19stadistics.ui
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import com.androidavanzado.covid19stadistics.MyApplication
 import com.androidavanzado.covid19stadistics.R
 import com.androidavanzado.covid19stadistics.databinding.ActivityHomeBinding
-import com.androidavanzado.covid19stadistics.di.Injector
-import com.androidavanzado.covid19stadistics.ui.viewmodel.StadisticsViewModel
-import com.androidavanzado.covid19stadistics.ui.viewmodel.ViewModelFactory
+import com.androidavanzado.covid19stadistics.ui.viewmodel.*
 import com.androidavanzado.covid19stadistics.usecase.ValidateDateSelected
 import com.androidavanzado.covid19stadistics.util.DateTextFormat
 import com.androidavanzado.covid19stadistics.util.DateYesterday
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.Resource
-import java.lang.reflect.Array.set
 import java.text.NumberFormat
+import javax.inject.Inject
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityHomeBinding
-    private lateinit var viewModel:StadisticsViewModel
+
+    @Inject lateinit var viewModelFactory: ViewModelFactory
+    lateinit var viewModel : StadisticsViewModel
 
     private val dateYesterday = DateYesterday()
     private val dateTextFormat = DateTextFormat()
     private val validateDateSelected = ValidateDateSelected()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        MyApplication().appComponent.inject(this)
         super.onCreate(savedInstanceState)
 
         binding = ActivityHomeBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(
-            this, ViewModelFactory(
-                Injector.provideRepository(), application
-            )
-        ).get(StadisticsViewModel::class.java)
-
+        viewModel = getViewModel(viewModelFactory)
         setUpUi()
     }
+
 
     @SuppressLint("SetTextI18n")
     private fun setUpUi(){

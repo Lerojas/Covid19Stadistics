@@ -1,15 +1,18 @@
 package com.androidavanzado.covid19stadistics.storage.remote
 
 
-import com.androidavanzado.covid19stadistics.R
 import com.androidavanzado.covid19stadistics.model.Stadistics
 import com.androidavanzado.covid19stadistics.storage.DataSource
 import com.androidavanzado.covid19stadistics.storage.Result
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class RemoteDataSource(private val apiClient: ApiClient) : DataSource {
+@Singleton
+//class RemoteDataSource (private val apiClient: ApiClient) : DataSource {
+class RemoteDataSource @Inject constructor(private val servicesApiInterface: ServicesApiInterface) : DataSource {
 
     override suspend fun getData(date: String): Result<Stadistics> {
-        val response = apiClient.build()?.getData(date)
+        val response = servicesApiInterface.getData(date)
         try{
             response?.let {
 
