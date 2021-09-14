@@ -1,2 +1,6 @@
 include ':app'
+include ':routercovid19stadisticsservices'
 rootProject.name = "Covid19Stadistics"
+
+
+project(':routercovid19stadisticsservices').projectDir = new File("Covid19Stadistics.RouterCovid19StadisticsServices")

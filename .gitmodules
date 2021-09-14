@@ -1,0 +1,3 @@
+[submodule "RouterCovid19StadisticsServices"]
+	path = RouterCovid19StadisticsServices
+	url = https://github.com/Lerojas/RouterCovid19StadisticsServices.git

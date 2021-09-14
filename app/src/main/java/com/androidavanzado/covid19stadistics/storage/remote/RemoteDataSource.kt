@@ -8,7 +8,6 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-//class RemoteDataSource (private val apiClient: ApiClient) : DataSource {
 class RemoteDataSource @Inject constructor(private val servicesApiInterface: ServicesApiInterface) : DataSource {
 
     override suspend fun getData(date: String): Result<Stadistics> {
