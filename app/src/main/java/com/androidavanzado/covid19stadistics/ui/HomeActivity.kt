@@ -6,14 +6,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.androidavanzado.covid19stadistics.MyApplication
+import au.com.carsales.basemodule.extension.visible
+import au.com.carsales.basemodule.util.loadImageAsGif
+import au.com.carsales.basemodule.util.loadImageWithoutPlaceholder
 import com.androidavanzado.covid19stadistics.R
+import com.androidavanzado.covid19stadistics.appComponent
 import com.androidavanzado.covid19stadistics.databinding.ActivityHomeBinding
 import com.androidavanzado.covid19stadistics.ui.viewmodel.*
 import com.androidavanzado.covid19stadistics.usecase.ValidateDateSelected
 import com.androidavanzado.covid19stadistics.util.DateTextFormat
 import com.androidavanzado.covid19stadistics.util.DateYesterday
-import com.bumptech.glide.Glide
 import java.text.NumberFormat
 import javax.inject.Inject
 
@@ -29,7 +31,7 @@ class HomeActivity : AppCompatActivity() {
     private val validateDateSelected = ValidateDateSelected()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        MyApplication().appComponent.inject(this)
+        appComponent().inject(this)
         super.onCreate(savedInstanceState)
 
         binding = ActivityHomeBinding.inflate(LayoutInflater.from(this))
@@ -38,7 +40,6 @@ class HomeActivity : AppCompatActivity() {
         viewModel = getViewModel(viewModelFactory)
         setUpUi()
     }
-
 
     @SuppressLint("SetTextI18n")
     private fun setUpUi(){
@@ -81,8 +82,9 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun showLoading(){
-        binding.imageViewLoading.visibility = View.VISIBLE
-        Glide.with(this).asGif().load(R.raw.loading).into(binding.imageViewLoading)
+        binding.imageViewLoading.visible()
+        binding.imageViewLoading.loadImageAsGif(R.raw.loading)
+        val url = "https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif"
     }
 
     private fun hideLoading(){
