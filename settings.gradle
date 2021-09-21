@@ -1,9 +1,8 @@
 include ':app'
-include ':basemodule'
-//include ':routercovid19services',':apiCovidServicesModule'
+include ':basemodule',':routercovidservices','apicovidmodule'
 
-//project(':routercovid19services').projectDir = new File('RouterCovid19Services/app')
-//project(':apiCovidServicesModule').projectDir = new File('ApiCovidServicesModule/app')
 project(':basemodule').projectDir = new File('android.basemodule/basemodule')
+project(':routercovidservices').projectDir = new File('RouterCovid19Services/routerCovidServices')
+project(':apicovidmodule').projectDir = new File('ApiCovidServicesModule/apicovidmodule')
 
 rootProject.name = "Covid19Stadistics"
