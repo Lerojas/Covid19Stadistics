@@ -5,18 +5,14 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.androidavanzado.covid19stadistics.model.Repository
-import com.androidavanzado.covid19stadistics.model.Stadistics
+import com.androidavanzado.covid19stadistics.service.ApiCovidServicePresentationImpl
 import com.example.apicovidmodule.model.StadisticsApi
 import com.example.apicovidmodule.storage.Result
-import com.example.routercovidservices.presentation.ApiCovidServicePresentationImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-/*open class StadisticsViewModel @Inject constructor(
-    private val repository: Repository, application: Application): AndroidViewModel(application) {*/
 open class StadisticsViewModel @Inject constructor(
     private val apiCovidServicePresentationImpl: ApiCovidServicePresentationImpl, application: Application): AndroidViewModel(application) {
 

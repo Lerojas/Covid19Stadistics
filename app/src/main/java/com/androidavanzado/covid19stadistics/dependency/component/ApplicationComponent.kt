@@ -12,9 +12,8 @@ import javax.inject.Singleton
     modules = [
         ApplicationModule::class,
         ViewModelModule::class,
-        RepositoryModule::class,
-        RemoteDataSourceModule::class,
-        NetworkModule::class
+        NetworkModule::class,
+        ApiCovidServicePresentationImplModule::class
     ]
 )
 
