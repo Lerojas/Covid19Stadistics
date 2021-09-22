@@ -7,17 +7,21 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.androidavanzado.covid19stadistics.model.Repository
 import com.androidavanzado.covid19stadistics.model.Stadistics
-import com.androidavanzado.covid19stadistics.storage.Result
+import com.example.apicovidmodule.model.StadisticsApi
+import com.example.apicovidmodule.storage.Result
+import com.example.routercovidservices.presentation.ApiCovidServicePresentationImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+/*open class StadisticsViewModel @Inject constructor(
+    private val repository: Repository, application: Application): AndroidViewModel(application) {*/
 open class StadisticsViewModel @Inject constructor(
-    private val repository: Repository, application: Application): AndroidViewModel(application) {
+    private val apiCovidServicePresentationImpl: ApiCovidServicePresentationImpl, application: Application): AndroidViewModel(application) {
 
-    private val _values =  MutableLiveData<Stadistics>().apply { value = null  }
-    val data: LiveData<Stadistics> = _values
+    private val _values =  MutableLiveData<StadisticsApi>().apply { value = null  }
+    val data: LiveData<StadisticsApi> = _values
 
     private val _onMessageError= MutableLiveData<Boolean>()
     val onMessageError: LiveData<Boolean> = _onMessageError
@@ -25,8 +29,8 @@ open class StadisticsViewModel @Inject constructor(
     fun getData(date: String){
         viewModelScope.launch {
 
-            var result: Result<Stadistics> = withContext(Dispatchers.IO){
-                repository.getData(date)
+            var result: Result<StadisticsApi> = withContext(Dispatchers.IO){
+                apiCovidServicePresentationImpl.getData(date)
             }
 
             when(result){
