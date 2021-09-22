@@ -48,7 +48,6 @@ dependencies {
     
     implementation project(':basemodule')
     implementation project(':routercovidservices')
-    implementation project(':apicovidmodule')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.6.0'

@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.androidavanzado.covid19stadistics.service.ApiCovidServicePresentationImpl
+import com.example.apicovidmodule.model.RepositoryApi
 import com.example.apicovidmodule.model.StadisticsApi
 import com.example.apicovidmodule.storage.Result
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +15,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 open class StadisticsViewModel @Inject constructor(
-    private val apiCovidServicePresentationImpl: ApiCovidServicePresentationImpl, application: Application): AndroidViewModel(application) {
+    private val repositoryApi: RepositoryApi, application: Application): AndroidViewModel(application) {
 
     private val _values =  MutableLiveData<StadisticsApi>().apply { value = null  }
     val data: LiveData<StadisticsApi> = _values
@@ -26,7 +27,7 @@ open class StadisticsViewModel @Inject constructor(
         viewModelScope.launch {
 
             var result: Result<StadisticsApi> = withContext(Dispatchers.IO){
-                apiCovidServicePresentationImpl.getData(date)
+                repositoryApi.getData(date)
             }
 
             when(result){
