@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.androidavanzado.covid19stadistics.service.ApiCovidServicePresentationImpl
+import com.androidavanzado.covid19stadistics.usecase.ValidateDateSelected
 import com.example.apicovidmodule.model.RepositoryApi
 import com.example.apicovidmodule.model.StadisticsApi
 import com.example.apicovidmodule.storage.Result
@@ -17,26 +18,36 @@ import javax.inject.Inject
 open class StadisticsViewModel @Inject constructor(
     private val repositoryApi: RepositoryApi, application: Application): AndroidViewModel(application) {
 
+    private val validateDateSelected = ValidateDateSelected()
+
     private val _values =  MutableLiveData<StadisticsApi>().apply { value = null  }
     val data: LiveData<StadisticsApi> = _values
 
-    private val _onMessageError= MutableLiveData<Boolean>()
-    val onMessageError: LiveData<Boolean> = _onMessageError
+    private val _onMessageError= MutableLiveData<Int>()
+    val onMessageError: LiveData<Int> = _onMessageError
 
     fun getData(date: String){
+
         viewModelScope.launch {
 
-            var result: Result<StadisticsApi> = withContext(Dispatchers.IO){
-                repositoryApi.getData(date)
-            }
+            val dateValidate = validateDateSelected(date)
 
-            when(result){
-                is Result.Success -> {
-                    _values.value = result.data
+            if(dateValidate) {
+                var result: Result<StadisticsApi> = withContext(Dispatchers.IO) {
+                    repositoryApi.getData(date)
                 }
-                is Result.Failure -> {
-                    _onMessageError.postValue(result.optionFailure?:false)
+
+                when (result) {
+                    is Result.Success -> {
+                        _values.value = result.data
+                    }
+                    is Result.Failure -> {
+                        _onMessageError.postValue(result.optionFailure ?: 1)
+                    }
                 }
+            }
+            else{
+                _onMessageError.postValue(3)
             }
         }
     }
