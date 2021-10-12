@@ -1,0 +1,9 @@
+[submodule "RouterCovid19Services"]
+	path = RouterCovid19Services
+	url = https://github.com/lrojas870/RouterCovid19Services.git
+[submodule "ApiCovidServicesModule"]
+	path = ApiCovidServicesModule
+	url = https://github.com/lrojas870/ApiCovidServicesModule.git
+[submodule "android.basemodule"]
+	path = android.basemodule
+	url = git@github.com:carsales-PRIVATE/android.basemodule.git

@@ -1,0 +1,65 @@
+/*this file should only contain settings for allprojects/submodules,
+*eg: dependency library versions */
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        //        maven { url 'http://nexus.csprd.com.au/repository/maven-public' }
+    }
+}
+
+ext {
+    //'CI' environment variables is set in Jenkins configuration page
+    ci = 'true'.equals(System.getenv('CI'))
+
+    // SDK configs
+    androidMinSdkVersion = 24
+    androidTargetSdkVersion = 30
+    androidCompileSdkVersion = 30
+
+    // Others Libraries
+    daggerVersion = '2.24'
+    butterKnifeVersion = '8.8.1'
+    roomVersion = '1.1.1'
+    androidArchVersion = '1.1.1'
+    rxJavaVersion = '2.4.0'
+    rxAndroidVersion = '2.1.1'
+    javaxAnnotationVersion = '1.0'
+    gsonVersion = '2.8.5'
+    retrofitVersion = '2.6.1'
+    okHttpVersion = '4.1.0'
+    rxKotlinVersion = '0.60.0'
+    multidexVersion = '1.0.3'
+    javaxInjectVersion = '1'
+    glideVersion = '4.9.0'
+
+    junitVersion = '4.12'
+    runnerVersion = '1.0.2'
+    expressoVersion = '3.0.2'
+
+    javaLifeCycleVersion = '1.1.1'
+    nav_version = '1.0.0'
+    eventbus_version = "3.1.1"
+    ktx_version = "1.0.0-alpha1"
+
+    //some of these dependenies are only used by app module, not other submodules, will move them to app module gradle file
+    globalRetailDependencies = [
+
+            //this pairs should be removed, as different vertical has its own apikey and secret pairs
+            //APIKEY                               : "96375e76-d368-4a64-8db5-f63b9925809b",
+            //APISECRET                            : "wDdl8CVfbgBUYMQnItbYkpcnPfop6vBph4lEULg73Gc=",
+            //this one should be removed, as after checking it is not used by latam app
+            //APIKEY_PAYMENT                       : "37A8C13C-055A-4E54-AEA0-4D61C70DBD2C",
+
+            //this one is for latam apis, the counterpart in au project is "X-CSN-TOKEN";, should move to flavor.gradle
+            AUTH_HEADER                          : "Authorization",
+            AUTH_PAYMENT_HEADER                  : "authorization",
+            AUTH_BEARER                          : "Bearer ",
+
+            // Dagger
+            daggerAndroidCompiler   : "com.google.dagger:dagger-android-processor:${daggerVersion}",
+            daggerAndroid           : "com.google.dagger:dagger-android-support:${daggerVersion}",
+            daggerCompiler          : "com.google.dagger:dagger-compiler:${daggerVersion}",
+            dagger                  : "com.google.dagger:dagger:${daggerVersion}"
+    ]
+}
