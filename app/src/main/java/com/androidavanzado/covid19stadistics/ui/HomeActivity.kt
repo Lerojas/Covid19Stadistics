@@ -3,6 +3,7 @@ package com.androidavanzado.covid19stadistics.ui
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -64,8 +65,17 @@ class HomeActivity : AppCompatActivity() {
         viewModel.onMessageError.observe(this, {responseFailure ->
             hideLoading()
             val messageFailure =
-                if(responseFailure) getString(R.string.messageNoData)
-                else getString(R.string.messageFailure)
+                when (responseFailure) {
+                    1 -> {
+                        getString(R.string.messageNoData)
+                    }
+                    3 -> {
+                        getString(R.string.messageDateCanNotSelected)
+                    }
+                    else -> {
+                        getString(R.string.messageFailure)
+                    }
+                }
 
             showDialog(messageFailure)
         })
@@ -84,7 +94,6 @@ class HomeActivity : AppCompatActivity() {
     private fun showLoading(){
         binding.imageViewLoading.visible()
         binding.imageViewLoading.loadImageAsGif(R.raw.loading)
-        val url = "https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif"
     }
 
     private fun hideLoading(){
@@ -114,23 +123,15 @@ class HomeActivity : AppCompatActivity() {
 
     private fun onDateSelected(day: Int, month: Int, year: Int) {
 
-        val validateDate = validateDateSelected(day, month, year)
+        var monthString = (month + 1).toString()
 
-        if(validateDate){
-            var monthString = (month + 1).toString()
-
-            if(monthString.length<2){
-                monthString = "0$monthString"
-            }
-
-            val dateString = "$year-$monthString-$day"
-
-            callGetData(dateString)
+        if(monthString.length<2){
+            monthString = "0$monthString"
         }
-        else{
-            val message = getString(R.string.messageDateCanNotSelected)
-            showDialog(message)
-        }
+
+        val dateString = "$year-$monthString-$day"
+
+        callGetData(dateString)
     }
 
     private fun showDialog(message: String){
