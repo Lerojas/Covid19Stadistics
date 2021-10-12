@@ -8,25 +8,19 @@ class ValidateDateSelectedTest {
 
     @Test
     fun date_selected_is_older_that_today(){
-        val day = 30
-        val month = 8
-        val year = 2021
-        Assert.assertFalse(ValidateDateSelected().invoke(day, month, year))
+        val date = "30-10-2021"
+        Assert.assertFalse(ValidateDateSelected().invoke(date))
     }
 
     @Test
     fun date_selected_is_equals_that_today(){
-        val day = 29
-        val month = 8
-        val year = 2021
-        Assert.assertFalse(ValidateDateSelected().invoke(day, month, year))
+        val date = "30-10-2021"
+        Assert.assertFalse(ValidateDateSelected().invoke(date))
     }
 
     @Test
     fun date_selected_is_less_that_today(){
-        val day = 26
-        val month = 8
-        val year = 2021
-        Assert.assertTrue(ValidateDateSelected().invoke(day, month, year))
+        val date = "30-10-2021"
+        Assert.assertTrue(ValidateDateSelected().invoke(date))
     }
 }
