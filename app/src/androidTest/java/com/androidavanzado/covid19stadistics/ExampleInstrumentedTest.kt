@@ -1,7 +1,5 @@
 package com.androidavanzado.covid19stadistics
 
-
-
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -38,15 +36,19 @@ class ExampleInstrumentedTest {
 
     @Test
     fun validateTextTitleTv(){
+
+        //waiting time for the api to return a response
         Thread.sleep(8000)
+
+        //declaration of test variables
         val title = DateTextFormat().invoke(dateYesteday)
-        val confirmedCases = "Casos confirmados: 234.896.921"
-        val deathCases = "Cantidad de personas fallecidas: 4.801.353"
+        val confirmedCases = "Casos confirmados: "
+        val deathCases = "Cantidad de personas fallecidas: "
 
         //validate textView when loading information
         onView(withId(R.id.titleTv)).check(matches(withText(title)))
-        onView(withId(R.id.confirmedCasesTv)).check(matches(withText(confirmedCases)))
-        onView(withId(R.id.cantDeceasedTv)).check(matches(withText(deathCases)))
+        onView(withId(R.id.confirmedCasesTv)).check(matches(withSubstring(confirmedCases)))
+        onView(withId(R.id.cantDeceasedTv)).check(matches(withSubstring(deathCases)))
     }
 }
 

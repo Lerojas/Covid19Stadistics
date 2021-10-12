@@ -1,13 +1,10 @@
 package com.androidavanzado.covid19stadistics.ui
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import au.com.carsales.basemodule.extension.initObserver
 import com.androidavanzado.covid19stadistics.util.BaseUnitTest
 import com.androidavanzado.covid19stadistics.MyApplication
 import com.androidavanzado.covid19stadistics.ui.viewmodel.StadisticsViewModel
-import com.androidavanzado.covid19stadistics.usecase.ValidateDateSelected
-import com.androidavanzado.covid19stadistics.util.DateTomorrow
+import com.androidavanzado.covid19stadistics.util.StadisticsViewModelTestDateUtils
 import com.androidavanzado.covid19stadistics.util.DateYesterday
 import com.example.apicovidmodule.model.RepositoryApi
 import com.example.apicovidmodule.model.StadisticsApi
@@ -17,7 +14,6 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
-import java.util.*
 
 @ExperimentalCoroutinesApi
 class StadisticsViewModelTest : BaseUnitTest() {
@@ -54,8 +50,10 @@ class StadisticsViewModelTest : BaseUnitTest() {
             val stadisticsApi = StadisticsModelFactory().getStadisticsObjet()
 
             Mockito.`when`(repositoryApi.getData(dateYesterday)).thenReturn(result)
-
             stadisticsViewModel.getData(dateYesterday)
+            Mockito.verify(dataObserver).onChanged(null)
+
+            //waiting time for the api to return a response
             Thread.sleep(5000)
             Mockito.verify(dataObserver).onChanged(Mockito.refEq(stadisticsApi))
         }
@@ -66,7 +64,7 @@ class StadisticsViewModelTest : BaseUnitTest() {
 
         testCoroutineRule.runBlockingTest {
 
-            val dateGreater = DateTomorrow().dateGreaterThanToday()
+            val dateGreater = StadisticsViewModelTestDateUtils().dateGreaterThanToday()
             stadisticsViewModel.getData(dateGreater)
             Mockito.verify(onMessageErrorObserver).onChanged(3)
         }
@@ -77,7 +75,7 @@ class StadisticsViewModelTest : BaseUnitTest() {
 
         testCoroutineRule.runBlockingTest {
 
-            val dateNoData = DateTomorrow().dateNoData()
+            val dateNoData = StadisticsViewModelTestDateUtils().dateNoData()
             stadisticsViewModel.getData(dateNoData)
             Mockito.verify(dataObserver).onChanged(null)
         }

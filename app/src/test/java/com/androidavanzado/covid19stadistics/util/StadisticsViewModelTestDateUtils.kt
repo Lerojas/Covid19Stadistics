@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @SuppressLint("SimpleDateFormat")
-class DateTomorrow {
+class StadisticsViewModelTestDateUtils {
 
     private val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd")
 
